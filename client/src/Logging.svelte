@@ -1,0 +1,175 @@
+<script>
+	import moment from 'moment';
+	import DateSelector from './DateSelector.svelte';
+	import LogEntries from './LogEntries.svelte';
+	import { apiGetRequest } from './resources/requests.js';
+	import { logdataURL } from './resources/urls.js';
+
+	const dateFormat = 'ddd, MMM D, YYYY - HH:mm:ss';
+
+	let entries = [];
+	let hosts = [];
+	let streams = [];
+
+	let finterval;		// function
+	let updated;			// date
+	let updating = false;
+	let compactView = false;
+
+	let filterHost = '';
+	let filterStream = '';
+	let dateObject = { type: 'any', limit: 20 };
+	let reverse = true;
+
+	function calcOffsetDate(offset) {
+		return moment().subtract(offset, 'hour').toISOString();
+	}
+
+	// get data
+
+	async function getEntries(skip) {
+		updating = true;
+		let p = {
+			host: filterHost,
+			stream: filterStream,
+			reverse: reverse
+		};
+		if (skip) p.skip = skip;
+	 	if (dateObject.type === 'rel')
+			p.from = calcOffsetDate(dateObject.offset);
+		else if (dateObject.type === 'abs')
+			p = { ...p, from: dateObject.from, to: dateObject.to }
+		// debug
+		//console.log(p)
+		const r = await apiGetRequest(logdataURL, p);
+		if (!r.success) {
+			console.error(r)
+		 	entries = [];
+		}
+		if (skip) entries = [ ...entries, ...r.result ];
+		else entries = r.result;
+		updated = moment().format(dateFormat);
+		updating = false;
+	}
+	getEntries(0);
+
+	async function getHosts() {
+		const r = await apiGetRequest(logdataURL + '/hosts');
+		if (!r.success) {
+			console.error(r)
+		 	hosts = [];
+		}
+		hosts = r.result;
+	}
+	getHosts();
+
+	async function getStreams() {
+		const r = await apiGetRequest(logdataURL + '/streams');
+		if (!r.success) {
+			console.error(r)
+		 	streams = [];
+		}
+		streams = r.result;
+	}
+	getStreams();
+
+	// "setters"
+
+	function setUpdate(t) {
+		if (finterval) clearInterval(finterval);
+		if (t === 0) return;
+		finterval = setInterval(getEntries, t * 1000);
+	}
+	setUpdate(15)
+
+	function setDateObject(v) {
+		dateObject = v;
+		getEntries();
+	}
+
+	function setReverse(v) {
+		reverse = v;
+		getEntries();
+	}
+
+	function setFilterHost(v) {
+		filterHost = v;
+		getEntries();
+	}
+
+	function setFilterStream(v) {
+		filterStream = v;
+		getEntries();
+	}
+
+</script>
+
+<div class="updatedBox">
+	<small>Updated: {updated} {#if updating}refreshing...{/if}</small>
+</div>
+<h3>Logging</h3>
+<div class="selectBox">
+	Update Interval:
+	<select on:change={ (e) => setUpdate(parseInt(e.target.value)) }>
+		<option value="1">1s</option>
+		<option value="5">5s</option>
+		<option value="15" selected>15s</option>
+		<option value="30">30s</option>
+		<option value="60">1min</option>
+		<option value="300">5min</option>
+		<option value="0">Never</option>
+	</select>
+	<button on:click={ () => getEntries() }>Update Now</button>
+</div>
+<div class="selectBox">
+	<DateSelector on:change={ (e) => setDateObject(e.detail) } />
+</div>
+<div>
+	Reverse:
+	<input type="checkbox" checked
+				 on:change={ (e) => setReverse(e.target.checked) }>
+</div>
+<div class="selectBox">
+	Host:
+	<select on:change={ (e) => setFilterHost(e.target.value) }>
+		<option value="">any</option>
+		{#each hosts as h}
+		<option value="{h}">{h}</option>
+		{/each}
+	</select>
+</div>
+<div class="selectBox">
+	Stream:
+	<select on:change={ (e) => setFilterStream(e.target.value) }>
+		<option value="">any</option>
+		{#each streams as h}
+		<option value="{h}">{h}</option>
+		{/each}
+	</select>
+</div>
+<div>
+	Compact View:
+	<input type="checkbox" on:change={ (e) => compactView = e.target.checked }>
+</div>
+
+<LogEntries on:fetch={ () => getEntries(entries.length) }
+						{entries} {compactView} />
+
+<style>
+	.updatedBox {
+		display: flex;
+		justify-content: center;
+		margin-top: 5px;
+		color: var(--main-text-color-low-emph);
+	}
+	.selectBox {
+		margin-bottom: 5px;
+	}
+	.daterange {
+		display: inline-block;
+		vertical-align: top;
+	}
+	.invalidrange {
+		color: var(--error);
+	}
+</style>
