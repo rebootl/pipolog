@@ -9,4 +9,7 @@ Needs a mongodb database.
 ## Todo
 
 - user auth. (Login/Logout etc.)
-- ..
+- systemd service for agent
+
+
+- test on server/production

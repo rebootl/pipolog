@@ -75,10 +75,10 @@ function getAbsoluteDateQuery(host, stream, from, to) {
 
 router.get('/', async (req, res) => {
   // check login
-  /*if (!req.user) {
+  if (!req.user) {
     console.log('unallowed request rejected');
     return res.sendStatus(401);
-  }*/
+  }
   const db = req.app.locals.db;
   const c = await db.collection('logdata');
 
@@ -113,6 +113,10 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/hosts', async (req, res) => {
+  if (!req.user) {
+    console.log('unallowed request rejected');
+    return res.sendStatus(401);
+  }
   const db = req.app.locals.db;
   const c = await db.collection('logdata');
   const r = await c.distinct('host');
@@ -120,6 +124,10 @@ router.get('/hosts', async (req, res) => {
 });
 
 router.get('/streams', async (req, res) => {
+  if (!req.user) {
+    console.log('unallowed request rejected');
+    return res.sendStatus(401);
+  }
   const db = req.app.locals.db;
   const c = await db.collection('logdata');
   const r = await c.distinct('name');

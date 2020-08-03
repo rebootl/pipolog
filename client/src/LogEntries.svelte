@@ -13,7 +13,6 @@
 
 	function lazyLoad(e) {
 		if (e[e.length - 1].intersectionRatio <= 0) return;
-		//const skip = entries.length;
 		dispatch('fetch');
 	}
 
@@ -53,7 +52,7 @@
 
 <style>
 	.entrieslist {
-		margin-top: 20px;
+		margin-top: 10px;
 		margin-bottom: 20px;
 		border-top: 2px solid var(--hline-color);
 		padding-top: 10px;

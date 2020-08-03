@@ -62,7 +62,7 @@
 </script>
 
 <div class="selectBox">
-	Date:
+	Timespan:
 	<select on:change={ (e) => setType(e.target.value) }>
 		<option value="any">any</option>
 		<option value="rel">from now</option>

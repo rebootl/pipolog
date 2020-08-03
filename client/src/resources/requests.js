@@ -5,7 +5,6 @@ const defaultHeader = {
   'Content-Type': 'application/json'
 }
 
-
 function createQueryString(parameterObject) {
   // params can be single params (booleans)
   // key value pairs

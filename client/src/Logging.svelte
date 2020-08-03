@@ -3,6 +3,7 @@
 	import DateSelector from './DateSelector.svelte';
 	import LogEntries from './LogEntries.svelte';
 	import { apiGetRequest } from './resources/requests.js';
+	import { getAuthHeaderJSON } from './resources/auth.js';
 	import { logdataURL } from './resources/urls.js';
 
 	const dateFormat = 'ddd, MMM D, YYYY - HH:mm:ss';
@@ -41,10 +42,11 @@
 			p = { ...p, from: dateObject.from, to: dateObject.to }
 		// debug
 		//console.log(p)
-		const r = await apiGetRequest(logdataURL, p);
+		const r = await apiGetRequest(logdataURL, p, getAuthHeaderJSON());
 		if (!r.success) {
 			console.error(r)
 		 	entries = [];
+			return;
 		}
 		if (skip) entries = [ ...entries, ...r.result ];
 		else entries = r.result;
@@ -54,7 +56,7 @@
 	getEntries(0);
 
 	async function getHosts() {
-		const r = await apiGetRequest(logdataURL + '/hosts');
+		const r = await apiGetRequest(logdataURL + '/hosts', {}, getAuthHeaderJSON());
 		if (!r.success) {
 			console.error(r)
 		 	hosts = [];
@@ -64,7 +66,7 @@
 	getHosts();
 
 	async function getStreams() {
-		const r = await apiGetRequest(logdataURL + '/streams');
+		const r = await apiGetRequest(logdataURL + '/streams', {}, getAuthHeaderJSON());
 		if (!r.success) {
 			console.error(r)
 		 	streams = [];
@@ -124,7 +126,7 @@
 <div class="selectBox">
 	<DateSelector on:change={ (e) => setDateObject(e.detail) } />
 </div>
-<div>
+<div class="selectBox">
 	Reverse:
 	<input type="checkbox" checked
 				 on:change={ (e) => setReverse(e.target.checked) }>
@@ -147,7 +149,7 @@
 		{/each}
 	</select>
 </div>
-<div>
+<div class="selectBox">
 	Compact View:
 	<input type="checkbox" on:change={ (e) => compactView = e.target.checked }>
 </div>
