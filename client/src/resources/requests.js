@@ -55,6 +55,7 @@ export async function apiGetRequest(apiUrl, parameterObject = {},
   if (!response.ok) {
     const e = new Error('HTTP error, status = ' + response.status);
     e.code = 'ESERVER';
+    e.status = response.status;
     console.error(e);
     return { success: false, error: e };
   }

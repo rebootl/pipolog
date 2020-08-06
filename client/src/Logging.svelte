@@ -1,10 +1,13 @@
 <script>
 	import moment from 'moment';
+	import { createEventDispatcher } from 'svelte';
 	import DateSelector from './DateSelector.svelte';
 	import LogEntries from './LogEntries.svelte';
 	import { apiGetRequest } from './resources/requests.js';
-	import { getAuthHeaderJSON } from './resources/auth.js';
+	import { logout } from './resources/auth.js';
 	import { logdataURL } from './resources/urls.js';
+
+	const dispatch = createEventDispatcher();
 
 	const dateFormat = 'ddd, MMM D, YYYY - HH:mm:ss';
 
@@ -42,10 +45,16 @@
 			p = { ...p, from: dateObject.from, to: dateObject.to }
 		// debug
 		//console.log(p)
-		const r = await apiGetRequest(logdataURL, p, getAuthHeaderJSON());
+		const r = await apiGetRequest(logdataURL, p);
 		if (!r.success) {
 			console.error(r)
 		 	entries = [];
+			if (r.error.status === 401) {
+				// set interface to logged out
+				localStorage.removeItem('username');
+				setUpdate(0);
+				dispatch('loggedout');
+			}
 			return;
 		}
 		if (skip) entries = [ ...entries, ...r.result ];
@@ -56,7 +65,7 @@
 	getEntries(0);
 
 	async function getHosts() {
-		const r = await apiGetRequest(logdataURL + '/hosts', {}, getAuthHeaderJSON());
+		const r = await apiGetRequest(logdataURL + '/hosts', {});
 		if (!r.success) {
 			console.error(r)
 		 	hosts = [];
@@ -66,7 +75,7 @@
 	getHosts();
 
 	async function getStreams() {
-		const r = await apiGetRequest(logdataURL + '/streams', {}, getAuthHeaderJSON());
+		const r = await apiGetRequest(logdataURL + '/streams', {});
 		if (!r.success) {
 			console.error(r)
 		 	streams = [];

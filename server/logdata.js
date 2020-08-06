@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { checkBasicAuth } from './auth.js';
+import { checkBasicAuth } from './authHelper.js';
 import * as config from './config.js';
 
 const requiredFields = [
@@ -75,7 +75,8 @@ function getAbsoluteDateQuery(host, stream, from, to) {
 
 router.get('/', async (req, res) => {
   // check login
-  if (!req.user) {
+  //console.log(req.session)
+  if (!req.session.loggedIn) {
     console.log('unallowed request rejected');
     return res.sendStatus(401);
   }
@@ -113,7 +114,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/hosts', async (req, res) => {
-  if (!req.user) {
+  if (!req.session.loggedIn) {
     console.log('unallowed request rejected');
     return res.sendStatus(401);
   }
@@ -124,7 +125,7 @@ router.get('/hosts', async (req, res) => {
 });
 
 router.get('/streams', async (req, res) => {
-  if (!req.user) {
+  if (!req.session.loggedIn) {
     console.log('unallowed request rejected');
     return res.sendStatus(401);
   }

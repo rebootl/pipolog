@@ -6,14 +6,15 @@ pipolog-agent features data collection on clients (separate rep.).
 
 Needs a mongodb database.
 
-## Todo
-
-- user auth. (Login/Logout etc.)
-- systemd service for agent
-
-
-- test on server/production
-
 ## Screenshot
 
 ![screenshot](screen-1.png)
+
+## Todo
+
+- systemd service for agent
+- deploy / test on server/production
+
+### Done
+
+- user auth. (Login/Logout etc.) => DONE

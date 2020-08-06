@@ -4,11 +4,11 @@
 
   const dispatch = createEventDispatcher();
 
-  function _logout() {
+  async function _logout() {
     if (!confirm("Logout?"));
       return;
-    logout();
-    dispatch('logout');
+    const r = await logout();
+    if (r.success) dispatch('logout');
   }
 </script>
 

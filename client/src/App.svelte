@@ -30,7 +30,7 @@
 			<Login on:login={ () => _loggedIn = loggedIn() } />
 		{:else}
 			<div class="content-wrapper">
-				<Logging />
+				<Logging on:loggedout={ () => _loggedIn = loggedIn() } />
 			</div>
 		{/if}
 	</main>
