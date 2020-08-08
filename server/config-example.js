@@ -21,7 +21,7 @@ const DBPASSWORD = 'example123';
 const DBURL = 'mongodb://localhost:27018';
 const DBNAME = 'pipolog';
 
-const STATICDIR = '../client/public';
+const STATICDIR = './client/public';
 
 const PRODUCTION = true;
 
