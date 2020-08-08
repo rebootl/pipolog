@@ -1,12 +1,8 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import * as config from './config.js';
 
 const router = express.Router();
-
-const refreshTokens = [];
-const refreshTokenSecret = 'mysupersecret2blablatoot';
 
 router.post('/login', (req, res) => {
   const username = req.body.username;
@@ -18,21 +14,7 @@ router.post('/login', (req, res) => {
       console.log("login ok");
       req.session.loggedIn = true;
       req.session.username = username;
-      res
-        /*.cookie('_pipolog_refreshtoken', createRefreshToken(), {
-          // Secure: true,
-          HttpOnly: true,
-          sameSite: 'Strict'
-        })
-        .cookie('_pipolog_token', createToken(), {
-          // Secure: true,
-          HttpOnly: true,
-          sameSite: 'Strict'
-        })*/
-        .send({
-          success: true,
-          //token: createToken()
-      });
+      res.send({ success: true });
     } else {
       console.log("login failed");
       res.sendStatus(401);
@@ -60,22 +42,3 @@ router.get('/logout', (req, res) => {
 });
 
 export default router;
-
-// login / jwt stuff
-
-function createToken() {
-  // sign with default (HMAC SHA256)
-  //let expirationDate =  Math.floor(Date.now() / 1000) + 30 //30 seconds from now
-  return jwt.sign(
-    { user: config.USER.name },
-    config.SECRET,
-    { expiresIn: 60 }
-  );
-}
-
-function createRefreshToken() {
-  return jwt.sign(
-    { user: config.USER.name },
-    config.SECRET
-  );
-}

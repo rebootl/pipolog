@@ -3,7 +3,7 @@ import { default as mongodb } from 'mongodb';
 import * as config from './config.js';
 
 const MongoClient = mongodb.MongoClient;
-const client = new MongoClient(config.DBURL, {
+export const client = new MongoClient(config.DBURL, {
   auth: { user: config.DBUSER, password: config.DBPASSWORD },
   useUnifiedTopology: true
 });

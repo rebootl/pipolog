@@ -12,6 +12,8 @@ Needs a mongodb database.
 
 ## Todo
 
+- test session expiry server-side
+
 - systemd service for agent
 - deploy / test on server/production
 

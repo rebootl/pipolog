@@ -48,7 +48,6 @@ export async function login(username, pw) {
 
 export async function logout() {
   const r = await apiGetRequest(authURL + '/logout');
-  console.log(r);
   if (!r.success) {
     console.log("Logout unsuccessful :/");
     return r;

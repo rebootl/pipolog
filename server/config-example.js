@@ -23,5 +23,7 @@ const DBNAME = 'pipolog';
 
 const STATICDIR = '../client/public';
 
+const PRODUCTION = true;
+
 export { API_KEY, PORT, SECRET, USER, DBUSER, DBPASSWORD, DBURL,
-  DBNAME, STATICDIR };
+  DBNAME, STATICDIR, PRODUCTION };
