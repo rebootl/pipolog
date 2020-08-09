@@ -1,5 +1,8 @@
 FROM node:14-alpine
 
+RUN apk add --no-cache tzdata
+ENV TZ=Europe/Zurich
+
 WORKDIR /usr/src/app
 
 # install npm packages first to make use of caching
