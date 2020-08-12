@@ -7,6 +7,8 @@ const MongoStore = connectMongo(session);
 
 import auth from './auth.js';
 import logdata from './logdata.js';
+import dbstats from './dbstats.js';
+import { collectStats } from './dbstats.js';
 import { client } from './db.js';
 
 import getDb from './db.js';
@@ -55,8 +57,12 @@ async function main() {
   const db = await getDb();
   app.locals.db = db;
 
+  // collect database stats hourly
+  setInterval(() => collectStats(db), 1000 * 60 * 60);
+
   app.use('/api/auth', auth);
   app.use('/api/logdata', logdata);
+  app.use('/api/dbstats', dbstats);
 
   app.listen(config.PORT);
 }

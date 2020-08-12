@@ -2,10 +2,13 @@
 	import moment from 'moment';
 	import Login from './Login.svelte';
 	import Logout from './Logout.svelte';
+	import Nav from './Nav.svelte';
 	import Logging from './Logging.svelte';
+	import DBStats from './DBStats.svelte';
 	import { loggedIn } from './resources/auth.js';
 
 	let _loggedIn = loggedIn();
+	let route = "dbstats";
 
 	const dateFormat = 'ddd, MMM D, YYYY - HH:mm:ss';
 	let date;
@@ -14,6 +17,18 @@
 	}
 	clockTick();
 	setInterval(clockTick, 1000);
+
+	function urlChange() {
+		const h = location.hash.slice(1) || '';
+		if (h === 'dbstats') route = "dbstats";
+		else {
+			route = "";
+			location.hash = "#";
+		}
+	}
+
+	window.addEventListener('hashchange', () => urlChange());
+	window.addEventListener('load', () => urlChange());
 </script>
 
 <div class="wrapper">
@@ -29,8 +44,13 @@
 		{#if !_loggedIn}
 			<Login on:login={ () => _loggedIn = loggedIn() } />
 		{:else}
+			<Nav />
 			<div class="content-wrapper">
-				<Logging on:loggedout={ () => _loggedIn = loggedIn() } />
+				{#if route == ""}
+					<Logging on:loggedout={ () => _loggedIn = loggedIn() } />
+				{:else if route = "dbstats"}
+					<DBStats />
+				{/if}
 			</div>
 		{/if}
 	</main>

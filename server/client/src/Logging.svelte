@@ -1,6 +1,7 @@
 <script>
 	import moment from 'moment';
 	import { createEventDispatcher } from 'svelte';
+	import Nav from './Nav.svelte';
 	import DateSelector from './DateSelector.svelte';
 	import LogEntries from './LogEntries.svelte';
 	import { apiGetRequest } from './resources/requests.js';
