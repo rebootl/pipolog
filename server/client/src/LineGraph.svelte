@@ -28,7 +28,6 @@
   let gridLineHeights = [];
   let xAxisHeight;
   let xAxisOffset;
-  let labelsY = [];
   let labelsX = [];
 
   $: update(data);
@@ -40,16 +39,23 @@
     scalefactor = (height - yOffset - yOffsetTop) / yrange;
   }
 
+  function getDrawHeight(s) {
+    return height - (s * scalefactor) - xAxisOffset - yOffset;
+  }
+
   function updateGrid() {
     xAxisOffset = Math.abs(ymin) * scalefactor;
     xAxisHeight = height - xAxisOffset - yOffset;
 
-    const g = []
-    for (let s = gridIntervalY; s < ymax; s += gridIntervalY) {
-      g.push(height - (s * scalefactor) - xAxisOffset - yOffset);
+    const n = ymin + (gridIntervalY - Math.abs(ymin) % gridIntervalY) - gridIntervalY;
+    let c = 0;
+    if (ymin < 0 && ymax > 0) {
+      c = n / gridIntervalY;
     }
-    for (let s = gridIntervalY; s < Math.abs(ymin); s += gridIntervalY) {
-      g.push(height + (s * scalefactor) - xAxisOffset - yOffset);
+    const g = [];
+    for (let s = n; s < ymax; s += gridIntervalY) {
+      g.push({ y: getDrawHeight(s), value: s, count: c });
+      c++;
     }
     gridLineHeights = g;
   }
@@ -74,29 +80,6 @@
     return path;
   }
 
-  function updateLabelsY() {
-    const l = [];
-    let c = 1;
-    for (let s = 0; s < ymax; s += gridIntervalY) {
-      l.push({
-        y: (height - (s * scalefactor) - xAxisOffset - yOffset),
-        value: s,
-        count: c,
-      });
-      c++;
-    }
-    c = 1;
-    for (let s = 0; s < Math.abs(ymin); s += gridIntervalY) {
-      l.push({
-        y: (height + (s * scalefactor) - xAxisOffset - yOffset),
-        value: -s,
-        count: c,
-      });
-      c++;
-    }
-    labelsY = l;
-  }
-
   function updateLabelsX() {
     const labels = [];
     const xInterval = (width - xOffset - xOffsetEnd) / (xLabels.length - 1);
@@ -116,7 +99,6 @@
     updateGrid();
     const points = calcPoints();
     path = updatePath(points);
-    updateLabelsY();
     updateLabelsX();
   }
 </script>
@@ -125,8 +107,8 @@
   <strong>{ title }</strong>
   <svg viewbox="0 0 { width } { height }">
     {#each gridLineHeights as h}
-      <line x1={ xOffset } y1={ h }
-            x2={ width - xOffsetEnd } y2={ h } stroke={ gridColor }
+      <line x1={ xOffset } y1={ h.y }
+            x2={ width - xOffsetEnd } y2={ h.y } stroke={ gridColor }
             stroke-width="1" stroke-dasharray="2" />
     {/each}
     <!-- y-axis -->
@@ -147,8 +129,8 @@
     <!-- graph -->
     <polyline points={ path }
               style="stroke:{ graphColor };fill:none;stroke-width:2px;" />
-    {#each labelsY as l}
-      {#if l.count % 2}
+    {#each gridLineHeights as l}
+      {#if !(l.count % 2)}
         <text class="axislabel" text-anchor="end"
               style="fill:{ labelColor }"
               x={ xOffset - 5 } y={ l.y }>{ l.value }</text>
