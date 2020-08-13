@@ -28,14 +28,17 @@
     }
     collectedStats = r.result;
   }
-  getCollectedStats();
 
   async function genObjectData() {
     objectsData = collectedStats.map((o) => o.objects);
-    console.log(objectsData)
+    //console.log(objectsData)
   }
-  genObjectData();
 
+  async function init() {
+    await getCollectedStats();
+    genObjectData();
+  }
+  init();
 </script>
 
 <h3>Database Stats</h3>
@@ -65,9 +68,18 @@
   </table>
 </small>
 
-<LineGraph title={"No. of Objects"} yrange={12} data={objectsData} />
+<div class="graphbox">
+  <LineGraph title={ "No. of Objects" } gridIntervalY={ 5000 }
+             ymin={ 0 } ymax={ 60000 }
+             data={ objectsData.reverse() } />
+</div>
+
+<LineGraph />
 
 <style>
+  .test {
+    font-size: 12px;
+  }
   .label {
     color: var(--main-text-color-low-emph);
   }
@@ -79,5 +91,8 @@
   table th, td {
     padding: 5px;
     border: 1px solid #555;
+  }
+  .graphbox {
+    max-width: 500px;
   }
 </style>

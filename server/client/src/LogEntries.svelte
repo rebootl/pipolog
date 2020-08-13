@@ -31,6 +31,7 @@
 			bottomObserver.unobserve(lastli);
 		}
 		const ul = document.querySelector('.entrieslist');
+		if (!ul) return;
 		const newLastli = ul.lastElementChild;
 		newLastli.classList.add('lastelement')
 		bottomObserver.observe(newLastli);
