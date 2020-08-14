@@ -2,11 +2,9 @@
   export let title = "Graph";
   export let data = [ 10, 5, 7, 8, -2, 6 ];
   export let gridIntervalY = 1;
-  // -> add oversizeFraction later
-  //export let oversizeFractionTop = 1.3;
-  //export let oversizeFractionBottom = null;
   export let ymax = 12;
   export let ymin = -3;
+  export let oversizeFraction = 0;
   export let xLabels = [ 'A', 'B', 'C' ];
 
   export let graphColor = "#ff77bb";
@@ -33,9 +31,18 @@
   $: update(data);
 
   function calcLayout() {
-    let max = Math.max(...data);
+    if (oversizeFraction) {
+      ymax = Math.max(...data) * oversizeFraction;
+      let min = Math.min(...data);
+      if (min < 0) ymin = min * oversizeFraction;
+      else {
+        // prevent warning output
+        if (min !== Infinity)
+          ymin = min * (1 / oversizeFraction);
+      }
+    }
 
-    yrange = Math.abs(ymax) + Math.abs(ymin);
+    yrange = ymax - ymin;
     scalefactor = (height - yOffset - yOffsetTop) / yrange;
   }
 
@@ -44,10 +51,10 @@
   }
 
   function updateGrid() {
-    xAxisOffset = Math.abs(ymin) * scalefactor;
+    xAxisOffset = -1 * ymin * scalefactor;
     xAxisHeight = height - xAxisOffset - yOffset;
 
-    const n = ymin + (gridIntervalY - Math.abs(ymin) % gridIntervalY) - gridIntervalY;
+    const n = ymin + (gridIntervalY - Math.abs(ymin) % gridIntervalY) //- gridIntervalY;
     let c = 0;
     if (ymin < 0 && ymax > 0) {
       c = n / gridIntervalY;

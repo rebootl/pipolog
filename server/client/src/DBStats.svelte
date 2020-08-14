@@ -69,12 +69,17 @@
 </small>
 
 <div class="graphbox">
-  <LineGraph title={ "No. of Objects" } gridIntervalY={ 5000 }
-             ymin={ 0 } ymax={ 60000 }
-             data={ objectsData.reverse() } />
+  <LineGraph title={ "No. of Objects" } gridIntervalY={ 1000 }
+             data={ objectsData.reverse() }
+             oversizeFraction={ 1.2 } />
+  <!--
+  <LineGraph title={ "Data" } gridIntervalY={ 2 }
+             ymin={ -10 } ymax={ 50 }
+             data={ [33, 40, 45, 32, 44, 43] }
+             oversizeFraction={ 1.2 } />
+  <LineGraph />
+  -->
 </div>
-
-<LineGraph />
 
 <style>
   .test {
