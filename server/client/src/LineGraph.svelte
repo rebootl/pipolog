@@ -16,8 +16,8 @@
 
   const xOffset = 40;
   const yOffset = 25;
-  const xOffsetEnd = 30;
-  const yOffsetTop = 20;
+  const xOffsetEnd = 40;
+  const yOffsetTop = 10;
 
   let yrange;
   let scalefactor;
@@ -146,12 +146,17 @@
     {#each labelsX as l}
       <text class="axislabel" text-anchor="middle"
             style="fill:{ labelColor }"
-            x={ l.x } y={ height - yOffset + 12 }>{ l.value }</text>
+            x={ l.x } y={ height - yOffset + 15 }>{ l.value }</text>
     {/each}
   </svg>
 </div>
 
 <style>
+  .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
   .axislabel {
     font-size: 8px;
     font-family: sans-serif;
