@@ -65,5 +65,6 @@ async function main() {
   app.use('/api/dbstats', dbstats);
 
   app.listen(config.PORT);
+  console.log("Listening on port: " + config.PORT);
 }
 main();
