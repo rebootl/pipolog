@@ -86,7 +86,7 @@
 <div class="flexwrap">
   <div class="graphbox">
     <LineGraph title={ "No. of Objects" }
-               gridIntervalY={ 1000 }
+               gridIntervalY={ 10000 }
                data={ objectsData.reverse() }
                xLabels={[ dateStart, dateEnd ]}
                oversizeFraction={ 1.2 } />
@@ -96,14 +96,14 @@
                gridIntervalY={ 10 }
                data={ dataSizeData.reverse() }
                xLabels={[ dateStart, dateEnd ]}
-               ymin={ 0 } ymax={ 100 } />
+               ymin={ 0 } ymax={ 200 } />
   </div>
   <div class="graphbox">
     <LineGraph title={ "Storage Size (MB)" }
                gridIntervalY={ 10 }
                data={ storageSizeData.reverse() }
                xLabels={[ dateStart, dateEnd ]}
-               ymin={ 0 } ymax={ 100 } />
+               ymin={ 0 } ymax={ 150 } />
   </div>
 </div>
 
