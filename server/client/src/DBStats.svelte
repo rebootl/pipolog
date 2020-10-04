@@ -1,5 +1,6 @@
 <script>
 	import moment from 'moment';
+	import PlotlyLineGraph from './PlotlyLineGraph.svelte';
   import { onMount } from 'svelte';
   import LineGraph from './LineGraph.svelte';
 	import { apiGetRequest } from './resources/requests.js';
@@ -11,7 +12,7 @@
   let statsData = [];
   let collectedStats = [];
 
-  let objectsData = [];
+	let objectsData = [];
   let dataSizeData = [];
   let storageSizeData = [];
   let dateStart = "";
@@ -37,19 +38,45 @@
   }
 
   async function genData() {
-    objectsData = collectedStats.map((o) => o.objects);
-    dataSizeData = collectedStats.map((o) => o.dataSize);
-    storageSizeData = collectedStats.map((o) => o.storageSize);
-    dateStart = moment(collectedStats[collectedStats.length - 1].timestamp)
-      .format(dateFormat);
-    dateEnd = moment(collectedStats[0].timestamp).format(dateFormat);
+		// legend
+		const legendData = collectedStats.map((o) => o.timestamp);
+
+		// number of objects data
+    const od = collectedStats.map((o) => o.objects);
+		objectsData = [{
+			y: od,
+			x: legendData,
+			line: {
+    		color: '#ff77bb'
+			},
+		}];
+
+		// data size data
+    const dsd = collectedStats.map((o) => o.dataSize);
+		dataSizeData = [{
+			y: dsd,
+			x: legendData,
+			line: {
+				color: '#ff77bb'
+			},
+		}];
+
+		// storage size data
+		const ssd = collectedStats.map((o) => o.storageSize);
+    storageSizeData = [{
+			y: ssd,
+			x: legendData,
+			line: {
+				color: '#ff77bb'
+			},
+		}];
   }
 
-  async function init() {
+  onMount(async () => {
     await getCollectedStats();
     genData();
-  }
-  init();
+  });
+  //init();
 </script>
 
 <h3>Database Stats</h3>
@@ -82,27 +109,17 @@
 </div>
 
 <div class="flexwrap">
-  <div class="graphbox">
-    <LineGraph title={ "No. of Objects" }
-               gridIntervalY={ 10000 }
-               data={ objectsData.reverse() }
-               xLabels={[ dateStart, dateEnd ]}
-               oversizeFraction={ 1.2 } />
-  </div>
-  <div class="graphbox">
-    <LineGraph title={ "Data Size (MB)" }
-               gridIntervalY={ 50 }
-               data={ dataSizeData.reverse() }
-               xLabels={[ dateStart, dateEnd ]}
-               ymin={ 0 } ymax={ 500 } />
-  </div>
-  <div class="graphbox">
-    <LineGraph title={ "Storage Size (MB)" }
-               gridIntervalY={ 10 }
-               data={ storageSizeData.reverse() }
-               xLabels={[ dateStart, dateEnd ]}
-               ymin={ 0 } ymax={ 150 } />
-  </div>
+	<PlotlyLineGraph name="nobjects-graph"
+									 data={ objectsData }
+									 title={"<b>No. of Entries</b>"} />
+
+ 	<PlotlyLineGraph name="datasize-graph"
+									 data={ dataSizeData }
+									 title={"<b>Data Size (MB)</b>"} />
+
+  <PlotlyLineGraph name="storagesize-graph"
+									 data={ storageSizeData }
+									 title={"<b>Storage Size (MB)</b>"} />
 </div>
 
 <style>

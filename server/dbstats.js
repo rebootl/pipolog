@@ -36,7 +36,7 @@ router.get('/collected', async (req, res) => {
   const db = req.app.locals.db;
   const c = await db.collection('dbstats');
 
-  const r = await c.find().sort({ timestamp: -1 }).toArray();
+  const r = await c.find().sort({ timestamp: 1 }).toArray();
   res.send({ success: true, result: r });
 });
 

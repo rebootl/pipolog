@@ -1,7 +1,8 @@
 <script>
   export let title = "Graph";
   export let data = [ 10, 5, 7, 8, -2, 6 ];
-  export let gridIntervalY = 1;
+  export let gridIntervalY = 0;
+  export let gridSegmentsY = 10;
   export let ymax = 12;
   export let ymin = -3;
   export let oversizeFraction = 0;
@@ -31,6 +32,7 @@
   $: update(data);
 
   function calcLayout() {
+    // y-axis range
     if (oversizeFraction) {
       ymax = Math.max(...data) * oversizeFraction;
       let min = Math.min(...data);
@@ -41,8 +43,18 @@
           ymin = min * (1 / oversizeFraction);
       }
     }
+    if (ymax === Infinity || ymax === -Infinity || ymin === Infinity ||
+        ymin === -Infinity)
+      yrange = 10;
+    else yrange = ymax - ymin;
 
-    yrange = ymax - ymin;
+    //console.log(ymax)
+    // y-axis grid interval
+    if (!gridIntervalY) {
+      gridIntervalY = yrange / gridSegmentsY;
+    }
+
+    // scale factor
     scalefactor = (height - yOffset - yOffsetTop) / yrange;
   }
 
