@@ -40,8 +40,6 @@
     objectsData = collectedStats.map((o) => o.objects);
     dataSizeData = collectedStats.map((o) => o.dataSize);
     storageSizeData = collectedStats.map((o) => o.storageSize);
-    //console.log(objectsData)
-    console.log(objectsData[objectsData.length - 1])
     dateStart = moment(collectedStats[collectedStats.length - 1].timestamp)
       .format(dateFormat);
     dateEnd = moment(collectedStats[0].timestamp).format(dateFormat);
@@ -93,10 +91,10 @@
   </div>
   <div class="graphbox">
     <LineGraph title={ "Data Size (MB)" }
-               gridIntervalY={ 10 }
+               gridIntervalY={ 50 }
                data={ dataSizeData.reverse() }
                xLabels={[ dateStart, dateEnd ]}
-               ymin={ 0 } ymax={ 200 } />
+               ymin={ 0 } ymax={ 500 } />
   </div>
   <div class="graphbox">
     <LineGraph title={ "Storage Size (MB)" }
