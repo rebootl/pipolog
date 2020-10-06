@@ -25,6 +25,7 @@
 	let filterStream = '';
 	let dateObject = { type: 'any', limit: 20 };
 	let reverse = true;
+	let batchSize = 20;
 
 	function calcOffsetDate(offset) {
 		return moment().subtract(offset, 'hour').toISOString();
@@ -37,7 +38,8 @@
 		let p = {
 			host: filterHost,
 			stream: filterStream,
-			reverse: reverse
+			reverse: reverse,
+			limit: batchSize
 		};
 		if (skip) p.skip = skip;
 	 	if (dateObject.type === 'rel')
@@ -114,6 +116,11 @@
 		getEntries();
 	}
 
+	function setBatchSize(v) {
+		batchSize = v;
+		getEntries();
+	}
+
 </script>
 
 <div class="updatedBox">
@@ -132,6 +139,16 @@
 		<option value="0">Never</option>
 	</select>
 	<button on:click={ () => getEntries() }>Update Now</button>
+</div>
+<div class="selectBox">
+	Batch Size:
+	<select on:change={ (e) => setBatchSize(parseInt(e.target.value)) }>
+		<option value="20">20</option>
+		<option value="50" selected>50</option>
+		<option value="100">100</option>
+		<option value="200">200</option>
+		<option value="500">500</option>
+	</select>
 </div>
 <div class="selectBox">
 	<DateSelector on:change={ (e) => setDateObject(e.detail) } />

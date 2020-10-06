@@ -83,8 +83,8 @@ router.get('/', async (req, res) => {
   const db = req.app.locals.db;
   const c = await db.collection('logdata');
 
-  // max limit
-  const limit = 20;
+  const limit = parseInt(req.query.limit) || 20;
+  if (limit > 500) res.sendstatus(400);
   const skip = parseInt(req.query.skip) || 0;
   const host = req.query.host;
   const stream = req.query.stream;
