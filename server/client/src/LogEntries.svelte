@@ -25,16 +25,17 @@
 	);
 
 	function updateObserver(m, o) {
-		const lastli = document.querySelector('.lastelement');
-		if (lastli) {
-			lastli.classList.remove('lastelement');
-			bottomObserver.unobserve(lastli);
+		const triggerEl = document.querySelector('.triggerelement');
+		if (triggerEl) {
+			triggerEl.classList.remove('triggerelement');
+			bottomObserver.unobserve(triggerEl);
 		}
-		const ul = document.querySelector('.entrieslist');
-		if (!ul) return;
-		const newLastli = ul.lastElementChild;
-		newLastli.classList.add('lastelement')
-		bottomObserver.observe(newLastli);
+		const el = document.querySelector('.entrieslist');
+		if (!el) return;
+		const newTriggerEl = el.children[el.children.length - 10];
+		if (!newTriggerEl) return;
+		newTriggerEl.classList.add('triggerelement')
+		bottomObserver.observe(newTriggerEl);
 	}
 
 	onMount(() => {
