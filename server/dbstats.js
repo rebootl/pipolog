@@ -29,7 +29,7 @@ export async function collectStats(db) {
     storageSize: r.storageSize,
     perf: s.wiredTiger.perf,
     tcmalloc: s.tcmalloc,
-    requestTime: rtime
+    rtime: rtime
   });
 }
 

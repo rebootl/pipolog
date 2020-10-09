@@ -15,8 +15,9 @@
 	let objectsData = [];
   let dataSizeData = [];
   let storageSizeData = [];
-  let dateStart = "";
-  let dateEnd = "";
+	let rtimeData = [];
+	let rperfData = [];
+	let wperfData = [];
 
   async function getBasicStats() {
     const r = await apiGetRequest(dbstatsURL, {});
@@ -36,6 +37,31 @@
     }
     collectedStats = r.result;
   }
+
+	function getLegendArray(data, keyname) {
+		const a = []
+		for (let o of data) {
+			if (o[keyname]) a.push(o.timestamp);
+		}
+		return a;
+	}
+
+	function getDataArray(data, keyname) {
+		const a = [];
+		for (let o of collectedStats) {
+			if (o[keyname]) a.push(o[keyname]);
+		}
+		return a;
+	}
+
+	function getPerformanceArray(data, keyname) {
+		const a = [];
+		for (let o of collectedStats) {
+			if (o.perf)
+				a.push(o.perf[keyname]);
+		}
+		return a;
+	}
 
   async function genData() {
 		// legend
@@ -70,6 +96,145 @@
 				color: '#ff77bb'
 			},
 		}];
+
+		// read time measurement data
+		// backwards compatible legends
+		const rtimeLegend = getLegendArray(collectedStats, 'rtime');
+		const rtd = getDataArray(collectedStats, 'rtime');
+		rtimeData = [{
+			y: rtd,
+			x: rtimeLegend,
+			line: {
+				color: '#88aaff'
+			},
+		}];
+
+		const perfLegend = getLegendArray(collectedStats, 'perf')
+		const rb1 = getPerformanceArray(
+			collectedStats,
+			'operation read latency histogram (bucket 1) - 100-249us'
+		);
+		const rb2 = getPerformanceArray(
+			collectedStats,
+			'operation read latency histogram (bucket 2) - 250-499us'
+		);
+		const rb3 = getPerformanceArray(
+			collectedStats,
+			'operation read latency histogram (bucket 3) - 500-999us'
+		);
+		const rb4 = getPerformanceArray(
+			collectedStats,
+			'operation read latency histogram (bucket 4) - 1000-9999us'
+		);
+		const rb5 = getPerformanceArray(
+			collectedStats,
+			'operation read latency histogram (bucket 5) - 10000us+'
+		);
+		rperfData = [
+			{
+				name: '100-249us',
+				y: rb1,
+				x: perfLegend,
+				line: {
+					color: '#33bb55'
+				}
+			},
+			{
+				name: '250-499us',
+				y: rb2,
+				x: perfLegend,
+				line: {
+					color: '#dddd33'
+				}
+			},
+			{
+				name: '500-999us',
+				y: rb3,
+				x: perfLegend,
+				line: {
+					color: '#dd9922'
+				}
+			},
+			{
+				name: '1000-9999us',
+				y: rb4,
+				x: perfLegend,
+				line: {
+					color: '#ff3322'
+				}
+			},
+			{
+				name: '10000us+',
+				y: rb5,
+				x: perfLegend,
+				line: {
+					color: '#dd33ee'
+				}
+			},
+		]
+
+		const wb1 = getPerformanceArray(
+			collectedStats,
+			'operation write latency histogram (bucket 1) - 100-249us'
+		);
+		const wb2 = getPerformanceArray(
+			collectedStats,
+			'operation write latency histogram (bucket 2) - 250-499us'
+		);
+		const wb3 = getPerformanceArray(
+			collectedStats,
+			'operation write latency histogram (bucket 3) - 500-999us'
+		);
+		const wb4 = getPerformanceArray(
+			collectedStats,
+			'operation write latency histogram (bucket 4) - 1000-9999us'
+		);
+		const wb5 = getPerformanceArray(
+			collectedStats,
+			'operation write latency histogram (bucket 5) - 10000us+'
+		);
+		wperfData = [
+			{
+				name: '100-249us',
+				y: wb1,
+				x: perfLegend,
+				line: {
+					color: '#33bb55'
+				}
+			},
+			{
+				name: '250-499us',
+				y: wb2,
+				x: perfLegend,
+				line: {
+					color: '#dddd33'
+				}
+			},
+			{
+				name: '500-999us',
+				y: wb3,
+				x: perfLegend,
+				line: {
+					color: '#dd9922'
+				}
+			},
+			{
+				name: '1000-9999us',
+				y: wb4,
+				x: perfLegend,
+				line: {
+					color: '#ff3322'
+				}
+			},
+			{
+				name: '10000us+',
+				y: wb5,
+				x: perfLegend,
+				line: {
+					color: '#dd33ee'
+				}
+			},
+		]
   }
 
   onMount(async () => {
@@ -120,6 +285,18 @@
   <PlotlyLineGraph name="storagesize-graph"
 									 data={ storageSizeData }
 									 title={"<b>Storage Size (MB)</b>"} />
+
+	<PlotlyLineGraph name="rtime-graph"
+									 data={ rtimeData }
+									 title={"<b>Read Time Measurement (ms)</b>"} />
+
+  <PlotlyLineGraph name="rperf-graph"
+ 									 data={ rperfData }
+ 									 title={"<b>OP read latency buckets</b>"} />
+
+	<PlotlyLineGraph name="wperf-graph"
+									 data={ wperfData }
+									 title={"<b>OP write latency buckets</b>"} />
 </div>
 
 <style>
