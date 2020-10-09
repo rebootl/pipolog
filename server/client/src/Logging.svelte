@@ -94,7 +94,7 @@
 		if (t === 0) return;
 		finterval = setInterval(getEntries, t * 1000);
 	}
-	setUpdate(15)
+	setUpdate(0)
 
 	function setDateObject(v) {
 		dateObject = v;
@@ -130,13 +130,13 @@
 <div class="selectBox">
 	Update Interval:
 	<select on:change={ (e) => setUpdate(parseInt(e.target.value)) }>
+		<option value="0" selected>Never</option>
 		<option value="1">1s</option>
 		<option value="5">5s</option>
-		<option value="15" selected>15s</option>
+		<option value="15">15s</option>
 		<option value="30">30s</option>
 		<option value="60">1min</option>
 		<option value="300">5min</option>
-		<option value="0">Never</option>
 	</select>
 	<button on:click={ () => getEntries() }>Update Now</button>
 </div>
