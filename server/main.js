@@ -57,6 +57,14 @@ async function main() {
   const db = await getDb();
   app.locals.db = db;
 
+  // set mongodb indexes for query performance
+  const l = await db.collection('logdata');
+  l.createIndexes([{ key: {
+    agent_timestamp: 1,
+    host: 1,
+    name: 1
+  }}]);
+
   // collect database stats hourly
   setInterval(() => collectStats(db), 1000 * 60 * 60);
 
