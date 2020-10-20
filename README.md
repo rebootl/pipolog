@@ -1,22 +1,21 @@
 # pipolog
 
-Simple logging aggregator. Server and web-interface.
+A simple logging aggregator. Server and Web-Interface (svelte).
 
-pipolog-agent features data collection on clients (separate rep.).
+- clients send data via agent/API (see pipolog-agent, separate repo.)
+- mongodb instance for storage required
 
-Needs a mongodb database.
-
-## Screenshot
+## Screenshots
 
 ![screenshot](screen-1.png)
 
 ## Todo
 
 - test session expiry server-side
-
-- systemd service for agent
-- deploy / test on server/production
+- data preparation for dbstats graphs on client could be performance optimized
 
 ### Done
 
+- deploy / test on server/production => DONE
+- systemd service for agent => DONE (in agent)
 - user auth. (Login/Logout etc.) => DONE
