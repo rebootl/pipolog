@@ -2,7 +2,7 @@
 
 A simple logging aggregator. Server and Web-Interface (svelte).
 
-- clients send data via agent/API (see pipolog-agent, separate repo.)
+- clients send data via agent/API (see [pipolog-agent](https://github.com/rebootl/pipolog-agent), separate repo.)
 - mongodb instance for storage required
 
 ## Screenshots
@@ -12,8 +12,10 @@ A simple logging aggregator. Server and Web-Interface (svelte).
 
 ## Todo
 
-- test session expiry server-side
+- add license
+- add info on dbstats collection (hourly)
 - data preparation for dbstats graphs on client could be performance optimized
+- test session expiry server-side
 
 ### Done
 
