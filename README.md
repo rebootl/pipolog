@@ -7,7 +7,8 @@ A simple logging aggregator. Server and Web-Interface (svelte).
 
 ## Screenshots
 
-![screenshot](screen-1.png)
+![screenshot logging](screen-1a.png)
+![screenshot dbstats](screen-2.png)
 
 ## Todo
 
