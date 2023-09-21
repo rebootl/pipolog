@@ -25,13 +25,13 @@ Motivation: Create a simple and resource friendly alternative to existing soluti
 
 ## Todo
 
-- add license
 - add info on dbstats collection (hourly)
 - data preparation for dbstats graphs on client could be performance optimized
 - test session expiry server-side
 
 ### Done
 
+- add license => DONE
 - deploy / test on server/production => DONE
 - systemd service for agent => DONE (in agent)
 - user auth. (Login/Logout etc.) => DONE
