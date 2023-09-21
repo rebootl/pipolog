@@ -1,4 +1,4 @@
-Info: This was made as a personal proof-of-concept / prototype / learning and experimentation project.
+__Info: This was made as a personal proof-of-concept / prototype / learning and experimentation project.__
 
 __It is currently not maintained or updated.__
 
