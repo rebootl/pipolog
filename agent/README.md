@@ -1,9 +1,3 @@
-Info: This was made as a personal proof-of-concept / prototype / learning and experimentation project.
-
-__It is currently not maintained or updated.__
-
-Part of: [pipolog](https://github.com/rebootl/pipolog)
-
 # pipolog-agent
 
 Fully asynchronous agent for pipolog. Installed on clients.
