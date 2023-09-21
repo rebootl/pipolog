@@ -15,7 +15,7 @@ A simple logging aggregator. Server and Web-Interface (svelte).
 
 Motivation: Create a simple and resource friendly alternative to existing solutions like graylog.
 
-- clients send data via agent/API (see [pipolog-agent](https://github.com/rebootl/pipolog-agent), separate repo.)
+- clients send data via agent/API (see [agent/](https://github.com/rebootl/pipolog/tree/master/agent))
 - mongodb instance for storage required
 
 ## Screenshots
