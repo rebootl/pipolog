@@ -1,3 +1,5 @@
+# pipolog
+
 __Info: This was made as a personal proof-of-concept / prototype / learning and experimentation project.__
 
 __It is currently not maintained or updated.__
@@ -9,7 +11,7 @@ other devices. Performance held up well but it was important to add indexes for 
 
 Keeping up with updates from Javascript dependencies would require a lot of effort and constant adaptions.
 
-# pipolog
+---
 
 A simple logging aggregator. Server and Web-Interface (svelte).
 
